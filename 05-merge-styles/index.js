@@ -16,9 +16,9 @@ async function mergeFiles(ext, srcDir, trgFile) {
   const ws = fs.createWriteStream(trgFile);
   for (let entry of directoryContents) {
     [entry.fileName, entry.ext] = entry.name.split('.');
-    if (entry.ext === ext) {
+    if (entry.isFile() && entry.ext === ext) {
       const rs = fs.createReadStream(path.resolve(srcDir, entry.name));
-      rs.pipe(ws, {end: false});
+      rs.pipe(ws, { end: false });
       await new Promise((resolve) => rs.on('end', resolve));
       ws.write('\n');
     }
